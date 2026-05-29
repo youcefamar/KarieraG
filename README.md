@@ -5,10 +5,10 @@
 Kariera helps students find the right professional course, compare institutes,
 get AI-driven course recommendations, and build a learning/career roadmap.
 
-> This repository is being migrated from a legacy Flutter + Firebase app to a
+> This repository was migrated from a legacy Flutter + Firebase app to a
 > production-ready monorepo. See [`docs/00-current-audit.md`](docs/00-current-audit.md)
-> for the audit and migration plan. The legacy Flutter app still lives at the
-> repo root until the archive move is approved (see audit §3).
+> for the audit and migration plan. The legacy Flutter app is archived under
+> [`legacy/flutter-app/`](legacy/flutter-app) (kept for reference, not built).
 
 ## Tech stack
 
@@ -29,9 +29,8 @@ get AI-driven course recommendations, and build a learning/career roadmap.
 
 ```
 kariera/
-├── apps/
-│   ├── mobile/         # React Native Expo TypeScript app
-│   └── admin-web/      # Future dashboard (placeholder)
+├── mobile/             # React Native Expo TypeScript app
+├── web/                # Future admin dashboard (placeholder)
 ├── backend/            # Django + DRF API
 │   ├── config/         # Project settings, urls, celery
 │   ├── apps/           # Domain apps (accounts, courses, ai, ...)
@@ -41,7 +40,8 @@ kariera/
 │   ├── docker/         # Compose + Dockerfiles
 │   └── scripts/
 ├── docs/               # Architecture, AI plan, roadmap, API design
-├── legacy/             # (after archive) old Flutter app
+├── legacy/             # Archived Flutter app (reference only, not built)
+│   └── flutter-app/
 ├── .env.example
 ├── Makefile
 └── README.md
@@ -76,7 +76,7 @@ make createsuperuser          # create admin user
 
 Mobile app:
 ```bash
-make mobile                   # cd apps/mobile && npm install && npx expo start
+make mobile                   # cd mobile && npm install && npx expo start
 ```
 
 ## Common commands

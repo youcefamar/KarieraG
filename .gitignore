@@ -65,7 +65,7 @@ db.sqlite3
 backend/staticfiles/
 backend/media/
 
-# ─── Node / Expo (apps/mobile) ──────────────────────────────
+# ─── Node / Expo (mobile/) ──────────────────────────────────
 node_modules/
 .expo/
 dist/

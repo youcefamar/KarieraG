@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Kariera",
+    "slug": "kariera",
+    "scheme": "kariera",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "plugins": ["expo-router", "expo-secure-store"],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.kariera.app"
+    }
+  }
+}

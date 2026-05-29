@@ -1,4 +1,4 @@
-# admin-web (placeholder)
+# web (placeholder)
 
 Future custom admin/analytics dashboard for Kariera.
 

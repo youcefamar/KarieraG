@@ -1,0 +1,81 @@
+# Local development stack. Run from repo root: `make docker-up`.
+# Build context is the repo root so Dockerfiles can copy backend/ and apps/.
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-kariera}
+      POSTGRES_USER: ${POSTGRES_USER:-kariera}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kariera}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kariera}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.backend
+    env_file: ../../.env
+    environment:
+      POSTGRES_HOST: db
+      DATABASE_URL: postgres://${POSTGRES_USER:-kariera}:${POSTGRES_PASSWORD:-kariera}@db:5432/${POSTGRES_DB:-kariera}
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  # Background worker (same image as backend).
+  worker:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.backend
+    env_file: ../../.env
+    environment:
+      POSTGRES_HOST: db
+      DATABASE_URL: postgres://${POSTGRES_USER:-kariera}:${POSTGRES_PASSWORD:-kariera}@db:5432/${POSTGRES_DB:-kariera}
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    command: celery -A config worker -l info
+    depends_on:
+      - backend
+      - redis
+
+  # Optional: DB admin UI.
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@kariera.local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    profiles: ["tools"]
+
+  # Optional: local email capture (SMTP 1025, UI 8025).
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    profiles: ["tools"]
+
+volumes:
+  pgdata:

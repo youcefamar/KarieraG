@@ -5,7 +5,9 @@
 
 ## 1. What exists now
 
-The repository root currently contains a **Flutter + Firebase** mobile application.
+The legacy **Flutter + Firebase** mobile application now lives under
+`legacy/flutter-app/` (archived — see §3). It originally sat at the repo root;
+the paths below are relative to the archive directory.
 
 | Area | Detail |
 |------|--------|
@@ -38,27 +40,28 @@ The repository root currently contains a **Flutter + Firebase** mobile applicati
 ## 2. What should be reused
 
 - **Product domain knowledge & UX flows** — the screen inventory maps almost 1:1 to the new mobile screens.
-- **Assets** (Lottie animations, images) — can be copied into `apps/mobile/assets/` selectively.
+- **Assets** (Lottie animations, images) — can be copied into `mobile/assets/` selectively.
 - **Firebase Storage** — optional, remains a valid storage backend option (see `07-deployment-plan.md`).
 - **Category taxonomy** (Development, Marketing, Business, Design, Finance) — seed data for `CourseCategory`.
 - **Domain copy** (French UI strings) — reusable for i18n.
 
 ## 3. What should be archived
 
-Move (do not delete) the entire legacy Flutter app into `legacy/flutter-app/`.
+The entire legacy Flutter app has been moved (not deleted) into
+`legacy/flutter-app/` via `git mv`, preserving history. The repo root now cleanly
+exposes the new stack: `backend/`, `apps/` (frontend), `infrastructure/`, `docs/`.
 
-**Archive plan (manual, reversible, executed only on confirmation):**
+**Archive executed:**
 ```bash
-# from repo root, on a dedicated branch
-git checkout -b chore/monorepo-restructure
-mkdir legacy
-git mv lib legacy/flutter-app/lib
-git mv android ios web windows macos linux legacy/flutter-app/
-git mv pubspec.yaml pubspec.lock analysis_options.yaml .metadata test assets legacy/flutter-app/
-git mv firebase_options.dart FirebaseService.dart legacy/flutter-app/   # if present at root
+mkdir legacy/flutter-app
+git mv lib android ios web windows macos linux test assets legacy/flutter-app/
+git mv pubspec.yaml pubspec.lock analysis_options.yaml .metadata legacy/flutter-app/
 git mv "GoogleService-Info.plist" "GoogleService-Info (1).plist" legacy/flutter-app/
-git commit -m "chore: archive legacy Flutter app under legacy/flutter-app"
+git mv APP_DESCRIPTION.md legacy/flutter-app/
 ```
+The move is reversible (`git mv` back) and retains full git history. `legacy/`
+is excluded from new tooling (lint/test/build target only `backend/` and
+`apps/`).
 Until that move is approved, the new stack is added **alongside** the Flutter app
 in new top-level folders (`apps/`, `backend/`, `infrastructure/`, `docs/`) so
 nothing breaks.
@@ -73,7 +76,7 @@ Everything functional is rebuilt on the new stack:
 
 | Legacy | Rebuilt as |
 |--------|-----------|
-| Flutter UI | React Native + Expo + TypeScript (`apps/mobile`) |
+| Flutter UI | React Native + Expo + TypeScript (`mobile/`) |
 | Firestore documents | PostgreSQL relational models (`backend/apps/*`) |
 | Client-side logic | Django REST Framework API (`/api/v1/`) |
 | Email-suffix roles | `User.role` enum: student / trainer / institute_owner / admin |
@@ -107,7 +110,7 @@ React Native (Expo, TS)  ──HTTPS/JWT──▶  Django REST Framework (/api/v
 
 - **API-first**: mobile and future `admin-web` share one versioned REST API.
 - **Service layer**: business logic in `services.py` per app, not in views.
-- **Admin**: Django Admin first; custom dashboard later (`apps/admin-web` placeholder).
+- **Admin**: Django Admin first; custom dashboard later (`web/` placeholder).
 - **Deployment-ready**: Docker Compose for local dev, env-var config, CI-ready layout.
 
 See `02-architecture.md` for the full target architecture.

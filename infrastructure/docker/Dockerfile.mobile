@@ -1,0 +1,13 @@
+# Kariera mobile (Expo dev server). Optional — running Expo on the host is
+# usually smoother for device/simulator access. Provided for parity.
+FROM node:20-slim
+
+WORKDIR /app
+
+COPY mobile/package*.json ./
+RUN npm install
+
+COPY mobile/ ./
+
+EXPOSE 8081 19000 19001
+CMD ["npx", "expo", "start", "--tunnel"]

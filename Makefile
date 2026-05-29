@@ -3,7 +3,7 @@
 
 COMPOSE := docker compose -f infrastructure/docker/docker-compose.local.yml
 BACKEND := backend
-MOBILE  := apps/mobile
+MOBILE  := mobile
 
 .DEFAULT_GOAL := help
 
