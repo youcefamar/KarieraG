@@ -21,7 +21,6 @@ start_infra() {
   until $COMPOSE exec -T db pg_isready -U kariera &>/dev/null; do sleep 1; done
   echo "✅ Infra ready"
 }
-
 start_backend() {
   echo "▶ Starting Django backend..."
   cd backend
