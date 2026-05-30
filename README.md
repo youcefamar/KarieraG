@@ -36,7 +36,7 @@ kariera/
 │   ├── apps/           # Domain apps (accounts, courses, ai, ...)
 │   ├── requirements/   # base / dev / prod
 │   └── manage.py
-├── infrastructure/
+├── infra/
 │   ├── docker/         # Compose + Dockerfiles
 │   └── scripts/
 ├── docs/               # Architecture, AI plan, roadmap, API design

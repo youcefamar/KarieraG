@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements/dev.txt
 
 COPY backend/ ./
 
-COPY infrastructure/docker/entrypoint.backend.sh /entrypoint.sh
+COPY infra/docker/entrypoint.backend.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 8000

@@ -32,7 +32,7 @@ URLs:
 ## Optional tools
 
 ```bash
-docker compose -f infrastructure/docker/docker-compose.local.yml \
+docker compose -f infra/docker/docker-compose.local.yml \
   --profile tools up -d pgadmin mailpit
 # pgAdmin: http://localhost:5050   Mailpit: http://localhost:8025
 ```

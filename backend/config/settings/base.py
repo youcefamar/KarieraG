@@ -27,6 +27,7 @@ THIRD_PARTY_APPS = [
     "rest_framework_simplejwt",
     "corsheaders",
     "drf_spectacular",
+    "django_apscheduler",
 ]
 LOCAL_APPS = [
     "apps.accounts",
@@ -39,6 +40,7 @@ LOCAL_APPS = [
     "apps.reviews",
     "apps.payments",
     "apps.ai",
+    "apps.scheduler",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -124,9 +126,9 @@ SPECTACULAR_SETTINGS = {
 # ─── CORS ─────────────────────────────────────────────────
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=["http://localhost:8081"])
 
-# ─── Celery ───────────────────────────────────────────────
-CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://localhost:6379/0")
-CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default="redis://localhost:6379/1")
+# ─── APScheduler ──────────────────────────────────────────
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # seconds
 
 # ─── AI / embeddings ──────────────────────────────────────
 AI_PROVIDER = env("AI_PROVIDER", default="mock")

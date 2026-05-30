@@ -1,7 +1,7 @@
 # Kariera — developer commands
 # Usage: make <target>
 
-COMPOSE := docker compose -f infrastructure/docker/docker-compose.local.yml
+COMPOSE := docker compose -f infra/docker/docker-compose.local.yml
 BACKEND := backend
 MOBILE  := mobile
 
@@ -50,7 +50,7 @@ format: ## Format backend (black + isort + ruff --fix)
 	cd $(BACKEND) && isort . && black . && ruff check --fix .
 
 .PHONY: docker-up
-docker-up: ## Start local stack (postgres, redis, backend, ...)
+docker-up: ## Start local stack (postgres + backend)
 	$(COMPOSE) up -d --build
 
 .PHONY: docker-down
